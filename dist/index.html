@@ -126,7 +126,7 @@ html, body {
               </svg>
         </div>
     <div class="vz-wrapper">
-        <audio id="myAudio" src="" data-author="Software Engineer" data-title="Riaz Laskar" data-image="https://www.gravatar.com/avatar/<%- avatar %>?s=200"></audio>
+        <audio id="myAudio" src="" data-author="Software Engineer" data-title="Riaz Laskar" :data-image="getAvatar"></audio>
         <div class="vz-wrapper -canvas">
             <canvas id="myCanvas" width="400" height="400"></canvas>
         </div>
@@ -154,12 +154,13 @@ html, body {
     </div>
     </div>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="/js/gif.js"></script>
-        <script src="/js/gif.worker.js"></script>
+        <script src="gif.js"></script>
+        <script src="md5.min.js"></script>
         <script>
          var gif 
+         var CURRENT_URL = window.location.href; 
         </script>
-        <script src="/js/visualizer.js"></script>
+        <script src="visualizer.js"></script>
         <script>
             new Vue({
             el: '#root',
@@ -178,7 +179,7 @@ html, body {
                     quality: 10,
                     width: 400,
                     height: 400,
-                    workerScript: '/js/gif.worker.js',
+                    workerScript: '/gif.worker.js',
                     transparent: '#000'
                 });
 
@@ -194,6 +195,14 @@ html, body {
                     barColor: this.barColor,
                     radius : 75
                 });
+            },
+            computed:{
+                getAvatar: function(){
+                    var url = new URL(CURRENT_URL);
+                    var email = url.searchParams.get("email") || 'riazcool77@gmail.com';
+                    var hash = md5(email)
+                    return `https://www.gravatar.com/avatar/${hash}?s=200`
+                }
             },
             methods:{
                 generateGif: function(){
